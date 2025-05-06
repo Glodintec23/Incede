@@ -117,4 +117,14 @@ public class EmployeeService {
 	        return dto;
 	    }
 
+
+	    public String deleteEmployeePermanently(Long id) {
+	        if (employeerepository.existsById(id)) {
+	        	employeerepository.deleteById(id);
+	            return "Employee hard deleted successfully.";
+	        } else {
+	            return "Employee not found.";
+	        }
+	    }
+
 }

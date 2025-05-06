@@ -10,6 +10,7 @@ import com.example.Employee.Employeedto.EmployeeDTO;
 import com.example.Employee.Employeeservice.EmployeeService;
  
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,18 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);   
         }
     }
+    
+    @DeleteMapping("/hard-delete/{id}")
+    public ResponseEntity<String> hardDeleteEmployee(@PathVariable Long id) {
+        String result = employeeservice.deleteEmployeePermanently(id);
+
+        if (result.contains("successfully")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+    }
+
 
 
 
