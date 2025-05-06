@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Employee
+=======
+# Tutorials
+>>>>>>> 21469ab (Initial commit)
 
 
 
@@ -15,14 +19,22 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
+<<<<<<< HEAD
 git remote add origin https://gitlab.com/Glodin23/employee.git
+=======
+git remote add origin https://gitlab.com/Glodin23/tutorials.git
+>>>>>>> 21469ab (Initial commit)
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
+<<<<<<< HEAD
 - [ ] [Set up project integrations](https://gitlab.com/Glodin23/employee/-/settings/integrations)
+=======
+- [ ] [Set up project integrations](https://gitlab.com/Glodin23/tutorials/-/settings/integrations)
+>>>>>>> 21469ab (Initial commit)
 
 ## Collaborate with your team
 
