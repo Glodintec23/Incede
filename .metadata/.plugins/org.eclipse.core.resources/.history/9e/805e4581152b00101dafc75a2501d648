@@ -1,0 +1,42 @@
+package com.example.liability_scheme.Service;
+
+import org.springframework.stereotype.Service;
+
+import com.example.liability_scheme.DTO.LiabilityDTO;
+import com.example.liability_scheme.Model.LiabilityModel;
+import com.example.liability_scheme.Repository.LiabilityRepository;
+
+ 
+@Service
+public class LiabilityService {
+	
+	public final LiabilityRepository liabilityRepository;
+	
+	public LiabilityService(LiabilityRepository liabilityRepository) {
+		this.liabilityRepository = liabilityRepository;
+	}
+	
+	//-------------------create and update the fields using post methode--------------------------------------//
+	
+	public LiabilityDTO CreateOrUpdateLiabilitySchemeSpecificMasterDetails(LiabilityDTO liabilityDto) {
+		
+		 if(liabilityDto.getSchemeSpecificId()!=null || liabilityDto.getSchemeSpecificId()!=0) {
+			 LiabilityModel newLiabilityModel = new LiabilityModel();
+			 newLiabilityModel.setConfigKey(liabilityDto.getConfigKey());
+			 newLiabilityModel.setConfigValue(liabilityDto.getConfigValue());
+			 newLiabilityModel.setConfigValueType(liabilityDto.getConfigValueType());
+			 newLiabilityModel.setSchemeId(liabilityDto.getSchemeId());
+			 newLiabilityModel.setDelete(false);
+		 }else {
+			 LiabilityModel existingLiabilityModel = liabilityRepository
+					 .findExistingLiabilitySchemeSpecificMasterDetails(liabilityDto.getSchemeSpecificId());
+			 if() {
+				 
+			 }
+		 }
+		
+	}
+	
+	
+
+}

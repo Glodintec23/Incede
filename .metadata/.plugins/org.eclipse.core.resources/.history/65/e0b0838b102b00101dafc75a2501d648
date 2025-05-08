@@ -1,0 +1,18 @@
+package com.example.liability_scheme.DTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class LiabilityDTO {
+	
+	   private Long scheme_specific_id;
+	   private Long scheme_id;
+	   private String config_key;
+	   private String config_value;
+	   private String config_value_type;
+
+}

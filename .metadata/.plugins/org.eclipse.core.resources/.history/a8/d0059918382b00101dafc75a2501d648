@@ -1,0 +1,85 @@
+package com.example.liability_scheme.Globalexceptionhandler;
+
+import com.example.liability_scheme.Response.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.apache.coyote.BadRequestException;
+import com.example.liability_scheme.Exception.DataNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    // Handle any Exception (generic handler for unexpected errors)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<String>> handleGeneralException(Exception ex) {
+        logger.error("Unexpected error occurred: ", ex); // Log the exception stack trace
+        
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("An unexpected error occurred.");
+        response.setData(null);
+        
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+    }
+    
+    // Handle NullPointerException specifically
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<String>> handleNullPointerException(NullPointerException ex) {
+        logger.error("Null Pointer Exception: ", ex); // Log the exception details
+        
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("Null value encountered. Please check your inputs.");
+        response.setData(null);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 400 Bad Request
+    }
+    
+    // Handle custom exception (e.g., DataNotFoundException)
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleDataNotFoundException(DataNotFoundException ex) {
+        logger.error("Data not found: ", ex); // Log the exception details
+        
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("Requested data not found.");
+        response.setData(null);
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // 404 Not Found
+    }
+    
+    // Handle BadRequestException (e.g., invalid inputs)
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse<String>> handleBadRequestException(BadRequestException ex) {
+        logger.error("Bad request: ", ex); // Log the exception details
+        
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("Invalid input data.");
+        response.setData(null);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 400 Bad Request
+    }
+
+    // Handle MethodArgumentNotValidException (for validation errors)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<String>> handleValidationException(MethodArgumentNotValidException ex) {
+        logger.error("Validation failed: ", ex); // Log validation failure
+        
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("Validation failed: " + ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        response.setData(null);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 400 Bad Request
+    }
+}

@@ -1,0 +1,98 @@
+package com.example.liability_scheme.Controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.liability_scheme.DTO.LiabilityDTO;
+import com.example.liability_scheme.Model.LiabilityModel;
+import com.example.liability_scheme.Response.ApiResponse;
+import com.example.liability_scheme.Service.LiabilityService;
+
+@RestController
+@RequestMapping("/v1/liability-scheme-specific-masters")
+public class LiabilityController {
+	
+	private final LiabilityService liabilityService;
+	
+	public LiabilityController(LiabilityService liabilityService) {
+		this.liabilityService =liabilityService;
+	}
+	
+	// -------------written by Glodin joseph----------------------------------
+	//--------------07/05/2025------------------------------------------------
+	//-------------controller to create of update fields-----------------------
+	
+	@PostMapping("/saveOrUpdate")
+	public ResponseEntity<ApiResponse<LiabilityDTO>> saveOrUpdate(@RequestBody LiabilityDTO liabilityDto) {
+	    LiabilityDTO result = liabilityService.createOrUpdateLiabilitySchemeSpecificMasterDetails(liabilityDto);
+
+	    ApiResponse<LiabilityDTO> response = new ApiResponse<>();
+	    
+	    if (result != null) {
+	        response.setStatus("successful");
+	        response.setMessage("Liability saved or updated successfully.");
+	        response.setData(result);
+	    } else {
+	        response.setStatus("unsuccessful");
+	        response.setMessage("Failed to save or update liability.");
+	        response.setData(null);
+	    }
+
+	    return ResponseEntity.ok(response);
+	}
+
+
+	  
+	  //---------------------delete using post method----------------//
+	
+	  @PostMapping("/liability/delete/{id}")
+	  public ResponseEntity<ApiResponse<Boolean>> softDeleteLiability(@PathVariable("id") Long id) {
+	      LiabilityModel result = liabilityService.softDeletingLiabilitySchemeSpecificMasterDetails(id);
+	      
+	      ApiResponse<Boolean> response;
+	      if (result != null && result.isDelete()) {
+	          response = new ApiResponse<>();
+	           response.setStatus("successful");
+		        response.setMessage("...");
+		        response.setData(true);
+	          
+	          return ResponseEntity.ok(response);
+	      } else {
+	          response = new ApiResponse<>();
+	          response.setStatus("un successfull");
+		        response.setMessage("...");
+		        response.setData(false);
+	          return ResponseEntity.status(404).body(response);
+	      }
+	  }
+	  
+	  
+	  //---------------------------------get details by using GET method-----------// 
+	  
+	  @GetMapping("/liability/get/{id}")
+	  public ResponseEntity<ApiResponse<Boolean>> getLiabilityDetails(@PathVariable("id") Long id) {
+	      LiabilityDTO result = liabilityService.getLiabilitySchemeSpecificMasterDetailById(id);
+	      
+	      ApiResponse<Boolean> response;
+	      if (result != null) {
+	          response = new ApiResponse<>();
+	           response.setStatus("successful");
+		        response.setMessage("...");
+		        response.setData(result);
+	          
+	          return ResponseEntity.ok(response);
+	      } else {
+	          response = new ApiResponse<>();
+	          response.setStatus("un successfull");
+		        response.setMessage("...");
+		        response.setData(false);
+	          return ResponseEntity.status(404).body(response);
+	      }
+	  }
+
+}

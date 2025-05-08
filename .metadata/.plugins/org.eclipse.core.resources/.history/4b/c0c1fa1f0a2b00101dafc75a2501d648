@@ -1,0 +1,7 @@
+package com.example.liability_scheme.DTO;
+
+public interface LiabilityDTO {
+	
+	
+
+}

@@ -1,0 +1,21 @@
+package com.example.liability_scheme.Response;
+
+ 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * A generic wrapper class for API responses.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ApiResponse<T> {
+    private String status;  // "success" or "error"
+    private T data; 		// The actual response payload
+    private String message; // Descriptive message
+            
+}
+

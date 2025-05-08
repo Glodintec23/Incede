@@ -1,0 +1,5 @@
+package com.example.liability_scheme.Response;
+
+public class ApiResponse {
+
+}

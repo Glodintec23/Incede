@@ -1,0 +1,18 @@
+package com.example.liability_scheme.Controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.liability_scheme.Service.LiabilityService;
+
+@RestController
+@RequestMapping("/v1/liability-scheme-specific-master")
+public class LiabilityController {
+	
+	private final LiabilityService liabilityService;
+	
+	public LiabilityController(LiabilityService liabilityService) {
+		this.liabilityService =liabilityService;
+	}
+
+}

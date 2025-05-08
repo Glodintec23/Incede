@@ -1,0 +1,36 @@
+package com.example.liability_scheme.Globalexceptionhandler;
+
+ 
+import com.example.liability_scheme.Response.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    // Handle any Exception
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<String>> handleGeneralException(Exception ex) {
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage(ex.getMessage()); // You can log the exception message here
+        response.setData(null);
+        
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+    }
+    
+    // Handle specific exceptions
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<String>> handleNullPointerException(NullPointerException ex) {
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus("error");
+        response.setMessage("Null value encountered");
+        response.setData(null);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 400 Bad Request
+    }
+}
+

@@ -1,0 +1,19 @@
+package com.example.liability_scheme.Service;
+
+import org.springframework.stereotype.Service;
+
+import com.example.liability_scheme.Repository.LiabilityRepository;
+
+ 
+@Service
+public class LiabilityService {
+	
+	public final LiabilityRepository liabilityRepository;
+	
+	public LiabilityService(LiabilityRepository liabilityRepository) {
+		this.liabilityRepository = liabilityRepository;
+	}
+	
+	
+
+}

@@ -1,0 +1,130 @@
+package com.example.liability_scheme.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.liability_scheme.DTO.LiabilityDTO;
+import com.example.liability_scheme.Model.LiabilityModel;
+import com.example.liability_scheme.Repository.LiabilityRepository;
+
+ 
+@Service
+public class LiabilityService {
+	
+	public final LiabilityRepository liabilityRepository;
+	
+	public LiabilityService(LiabilityRepository liabilityRepository) {
+		this.liabilityRepository = liabilityRepository;
+	}
+	
+	//-------------------create and update the fields using post methode--------------------------------------//
+	
+	public LiabilityDTO createOrUpdateLiabilitySchemeSpecificMasterDetails(LiabilityDTO liabilityDto) {
+
+	    if (liabilityDto.getSchemeSpecificId() != null && liabilityDto.getSchemeSpecificId() != 0) {
+ 	        LiabilityModel existingLiabilityModel = liabilityRepository
+	                .findExistingLiabilitySchemeSpecificMasterDetails(liabilityDto.getSchemeSpecificId());
+	        
+	        if (existingLiabilityModel != null) {
+	            existingLiabilityModel.setConfigKey(liabilityDto.getConfigKey());
+	            existingLiabilityModel.setConfigValue(liabilityDto.getConfigValue());
+	            existingLiabilityModel.setConfigValueType(liabilityDto.getConfigValueType());
+	            existingLiabilityModel.setSchemeId(liabilityDto.getSchemeId());
+	            existingLiabilityModel.setDelete(liabilityDto.isDelete());
+	            liabilityRepository.save(existingLiabilityModel);
+	        }
+
+	    } else {
+	    	
+ 	        LiabilityModel newLiabilityModel = new LiabilityModel();
+	        newLiabilityModel.setConfigKey(liabilityDto.getConfigKey());
+	        newLiabilityModel.setConfigValue(liabilityDto.getConfigValue());
+	        newLiabilityModel.setConfigValueType(liabilityDto.getConfigValueType());
+	        newLiabilityModel.setSchemeId(liabilityDto.getSchemeId());
+	        newLiabilityModel.setDelete(false);  
+	        liabilityRepository.save(newLiabilityModel);
+	    }
+
+	    return liabilityDto;  
+	}
+
+	//-------------------------soft deleting the fields using Post methode-------------------//
+	
+	public LiabilityModel softDeletingLiabilitySchemeSpecificMasterDetails(Long schemeSpecificId) {
+	    try {
+	        LiabilityModel findModelToDelete = liabilityRepository.findLiabilityModelForSoftDeleting(schemeSpecificId);
+	        if (findModelToDelete != null) {
+	            findModelToDelete.setDelete(true); // Soft delete by setting the flag
+	            return liabilityRepository.save(findModelToDelete); // Save the updated entity
+	        } else {
+	            System.out.println("No record found with schemeSpecificId: " + schemeSpecificId);
+	        }
+	    } catch (Exception e) {
+	        System.err.println("Error during soft delete: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
+	//------------------------get by id--------------------------------------------------------//
+	public LiabilityDTO getLiabilitySchemeSpecificMasterDetailById(Long schemeSpecificId) {
+	    try {
+	        LiabilityModel findModelBySchemeSpecifiId = liabilityRepository.findLiabilityModelForSoftDeleting(schemeSpecificId);
+	        System.out.println("-----------------"+findModelBySchemeSpecifiId);
+	        if (findModelBySchemeSpecifiId != null) {
+	            LiabilityDTO newLiabilityDTO = new LiabilityDTO();
+	            newLiabilityDTO.setConfigKey(findModelBySchemeSpecifiId.getConfigKey());
+	            newLiabilityDTO.setConfigValue(findModelBySchemeSpecifiId.getConfigValue());
+	            newLiabilityDTO.setConfigValueType(findModelBySchemeSpecifiId.getConfigValueType());
+	            newLiabilityDTO.setSchemeId(findModelBySchemeSpecifiId.getSchemeId());
+	            newLiabilityDTO.setDelete(findModelBySchemeSpecifiId.isDelete());
+	            return newLiabilityDTO;
+	        }
+	        
+	        return null;
+
+	    } catch (Exception e) {
+	        // Optionally log the exception
+	        System.err.println("Error while fetching liability scheme details: " + e.getMessage());
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+	
+	//---------------------------------get all liability details -----------------------------//
+	
+	public List<LiabilityDTO> getAllLiabilitySchemeSpecificMasterDetail() {
+	    List<LiabilityDTO> liabilityDTOList = new ArrayList<>();
+	    
+	    try {
+ 	        List<LiabilityModel> findAllModelBySchemeSpecifiId = liabilityRepository.findAllLiabilityModel();
+	        
+ 	        if (findAllModelBySchemeSpecifiId != null && !findAllModelBySchemeSpecifiId.isEmpty()) {
+	            
+ 	            for (LiabilityModel l : findAllModelBySchemeSpecifiId) {
+	                if (l != null) {
+	                    LiabilityDTO newLiabilityDTO = new LiabilityDTO();
+	                    newLiabilityDTO.setConfigKey(l.getConfigKey());
+	                    newLiabilityDTO.setConfigValue(l.getConfigValue());
+	                    newLiabilityDTO.setConfigValueType(l.getConfigValueType());
+	                    newLiabilityDTO.setSchemeId(l.getSchemeId());
+	                    newLiabilityDTO.setDelete(l.isDelete());
+	                    
+ 	                    liabilityDTOList.add(newLiabilityDTO);
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+ 	        e.printStackTrace();  
+	    }
+	    
+ 	    return liabilityDTOList;
+	}
+
+
+
+	
+
+}

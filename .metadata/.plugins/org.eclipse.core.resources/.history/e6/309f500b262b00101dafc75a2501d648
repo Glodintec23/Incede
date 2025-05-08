@@ -1,0 +1,70 @@
+package com.example.liability_scheme.Service;
+
+import org.springframework.stereotype.Service;
+
+import com.example.liability_scheme.DTO.LiabilityDTO;
+import com.example.liability_scheme.Model.LiabilityModel;
+import com.example.liability_scheme.Repository.LiabilityRepository;
+
+ 
+@Service
+public class LiabilityService {
+	
+	public final LiabilityRepository liabilityRepository;
+	
+	public LiabilityService(LiabilityRepository liabilityRepository) {
+		this.liabilityRepository = liabilityRepository;
+	}
+	
+	//-------------------create and update the fields using post methode--------------------------------------//
+	
+	public LiabilityDTO createOrUpdateLiabilitySchemeSpecificMasterDetails(LiabilityDTO liabilityDto) {
+
+	    if (liabilityDto.getSchemeSpecificId() != null && liabilityDto.getSchemeSpecificId() != 0) {
+ 	        LiabilityModel existingLiabilityModel = liabilityRepository
+	                .findExistingLiabilitySchemeSpecificMasterDetails(liabilityDto.getSchemeSpecificId());
+	        
+	        if (existingLiabilityModel != null) {
+	            existingLiabilityModel.setConfigKey(liabilityDto.getConfigKey());
+	            existingLiabilityModel.setConfigValue(liabilityDto.getConfigValue());
+	            existingLiabilityModel.setConfigValueType(liabilityDto.getConfigValueType());
+	            existingLiabilityModel.setSchemeId(liabilityDto.getSchemeId());
+	            existingLiabilityModel.setDelete(liabilityDto.isDelete());
+	            liabilityRepository.save(existingLiabilityModel);
+	        }
+
+	    } else {
+	    	
+ 	        LiabilityModel newLiabilityModel = new LiabilityModel();
+	        newLiabilityModel.setConfigKey(liabilityDto.getConfigKey());
+	        newLiabilityModel.setConfigValue(liabilityDto.getConfigValue());
+	        newLiabilityModel.setConfigValueType(liabilityDto.getConfigValueType());
+	        newLiabilityModel.setSchemeId(liabilityDto.getSchemeId());
+	        newLiabilityModel.setDelete(false);  
+	        liabilityRepository.save(newLiabilityModel);
+	    }
+
+	    return liabilityDto;  
+	}
+
+	//-------------------------soft deleting the fields using Post methode-------------------//
+	
+	public LiabilityModel softDeletingLiabilitySchemeSpecificMasterDetails(Long schemeSpecificId) {
+	    try {
+	        LiabilityModel findModelToDelete = liabilityRepository.findLiabilityModelForSoftDeleting(schemeSpecificId);
+	        if (findModelToDelete != null) {
+	            findModelToDelete.setDelete(true); // Soft delete by setting the flag
+	            return liabilityRepository.save(findModelToDelete); // Save the updated entity
+	        } else {
+	            System.out.println("No record found with schemeSpecificId: " + schemeSpecificId);
+	        }
+	    } catch (Exception e) {
+	        System.err.println("Error during soft delete: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+
+	
+
+}

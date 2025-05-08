@@ -1,0 +1,9 @@
+package com.example.liability_scheme.Repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.liability_scheme.Model.LiabilityModel;
+
+public interface LiabilityRepository extends JpaRepository<LiabilityModel, Long> {
+
+}
